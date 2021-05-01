@@ -1,51 +1,28 @@
 <template>
   <div id="app">
-    <tabbar>
-      <tabbar-item>
-        <template v-slot:item-img>
-          <img slot="item-img" src=".\assets\img\tabbar\home.png" alt="" />
-        </template>
-        <template v-slot:item-text>
-          <div slot="item-text">首页</div>
-        </template>
-      </tabbar-item>
-      <tabbar-item>
-        <template v-slot:item-img>
-          <img slot="item-img" src=".\assets\img\tabbar\chiquan.png" alt="" />
-        </template>
-        <template v-slot:item-text>
-          <div slot="item-text">吃货圈</div>
-        </template>
-      </tabbar-item>
-      <tabbar-item>
-        <template v-slot:item-img>
-          <img slot="item-img" src=".\assets\img\tabbar\chihuo.png" alt="" />
-        </template>
-        <template v-slot:item-text>
-          <div slot="item-text">吃货本货</div>
-        </template>
-      </tabbar-item>
-      <tabbar-item>
-        <template v-slot:item-img>
-          <img slot="item-img" src=".\assets\img\tabbar\chihuo.png" alt="" />
-        </template>
-        <template v-slot:item-text>
-          <div slot="item-text">吃货本货</div>
-        </template>
-      </tabbar-item>
-    </tabbar>
+    <router-view></router-view>
+    <main-bar></main-bar>
+    <!-- <swiper>
+      <swiper-item></swiper-item>
+    </swiper> 写到home里了-->
+    <!-- <count></count>
+    <testcount></testcount> -->
   </div>
 </template>
 
 <script>
-import Tabbar from "./components/tabbar/Tabbar";
-import TabbarItem from "./components/tabbar/TabbarItem";
+// import MainBar from "./components/MainBar";
+import MainBar from "components/content/mainbar/MainBar";
+
+import Count from "@/components/counttest/Count";
+import Testcount from "./components/counttest/Testcount.vue";
 
 export default {
   name: "App",
   components: {
-    Tabbar,
-    TabbarItem,
+    MainBar,
+    Count,
+    Testcount,
   },
 };
 </script>
@@ -53,4 +30,12 @@ export default {
 <style>
 /* @import url("./assets/css/base.css"); */
 /* 也可以这种方法引用，但是不推荐 */
+/* .item-img {
+  width: 24px;
+  height: 24px;
+  margin-top: 3px;
+  vertical-align: middle;
+  /* 去除图片和文字之间的小空间 */ /*
+  margin-bottom: 3px;
+} */
 </style>
