@@ -28,7 +28,7 @@ export default {
     imageItemLoad() {
       // console.log("goodsitem加载完了，");
       // this.$bus.$emit("imageHomeLoad");
-      this.$emit("listLoad");
+      // this.$emit("listLoad");
     },
   },
 };

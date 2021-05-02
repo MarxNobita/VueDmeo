@@ -10,8 +10,6 @@
       :probe-type="3"
       @scroll="hiddenBacktop"
       :backTopTime="2000"
-      :pullUpLoad="true"
-      @pullingUp="loadMore"
     >
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend :recommends="recommends"></home-recommend>
@@ -25,14 +23,14 @@
         @changeCurrentIndex="changeCurrentItem"
       ></tab-control>
       <goods-list
+        class="goods-list"
         :good="goods[currentIndex].list"
-        @homeImageLoad="homeLoadMore"
       ></goods-list>
     </scroll>
     <!-- <back-top @click="backtoTop" v-show="isShowBackTop"></back-top> -->
     <!-- 新版的好像不用@click.native也可以了 -->
     <!-- 带有滚动的可以使用better-scroll插件，性能更高，还有弹窗效果 -->
-    <ul>
+    <!-- <ul>
       <li>哈哈1</li>
       <li>哈哈2</li>
       <li>哈哈3</li>
@@ -88,7 +86,7 @@
       <li>哈哈53</li>
       <li>哈哈54</li>
       <li>哈哈55</li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 
@@ -205,6 +203,10 @@ export default {
     this.getHomeGoodsInHome("pop");
     this.getHomeGoodsInHome("new");
     this.getHomeGoodsInHome("sell");
+    setTimeout(() => {
+      this.getHomeGoodsInHome(this.currentIndex);
+      console.log('1')
+    }, 3000)
     // this.$bus.$on("imageHomeLoad", () => {
     //   console.log("home接受到事件总线");
     // });
@@ -298,7 +300,7 @@ export default {
     },
     //这个 hiddenBacktop放到计算属性只会触发一次？
 
-    /*没有防抖节流，还容易出现better-scroll的bug废弃掉，
+    // 没有防抖节流，还容易出现better-scroll的bug废弃掉，
     loadMore() {
       console.log("home里的上拉加载更多");
       this.getHomeGoodsInHome(this.currentIndex);
@@ -308,13 +310,13 @@ export default {
       // this.$refs.homescroll.scroll.refresh();
       // 重新计算下高度，避免bug，但是新版好像不用考虑这个bug了
     },
-    */
 
-    homeLoadMore() {
-      // this.$refs.homescroll.refresh();
-      // console.log("home收到图片加载完成");
-      this.debounce(this.$refs.homescroll.refresh(), 300);
-    },
+
+    // homeLoadMore() {
+    //   // this.$refs.homescroll.refresh();
+    //   // console.log("home收到图片加载完成");
+    //   this.debounce(this.$refs.homescroll.refresh(), 300);
+    // },
 
     // 防抖函数
     debounce(func, delay = 200) {
@@ -363,7 +365,7 @@ export default {
 .content {
   /* height: 550px; */
   height: calc(100vh - 93px);
-  overflow: hidden;
+  overflow: scroll;
   /* position: absolute;
   top: 44px;
   bottom: 49px;
