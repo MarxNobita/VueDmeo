@@ -11,7 +11,8 @@ const app = createApp(App)
 app.use(router)
 
 app.use(store)
-// app.devtools = true;
+// createApp.devtools = true;
+// const $bus = createApp()   vue3不再提供事件总线功能
 app.mount('#app')
 
 

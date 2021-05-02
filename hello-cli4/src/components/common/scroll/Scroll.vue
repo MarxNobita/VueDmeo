@@ -5,6 +5,8 @@
     <div>
       <slot></slot>
     </div>
+    <back-top @click="returnTop(backTopTime)" v-show="isShowBT"></back-top>
+    <img src="@/localtest/test1.png" class="testImg" alt="" />
   </div>
 </template>
 
@@ -13,6 +15,7 @@
 // 以后不要安装独立的插件，像下面那个安装，不然耦合其他功能时会报错，并无法使用
 import PullUp from "@better-scroll/pull-up";
 import BSscroll from "better-scroll";
+import BackTop from "components/common/backtop/BackTop";
 
 BSscroll.use(PullUp);
 export default {
@@ -20,9 +23,12 @@ export default {
   data() {
     return {
       scroll: null,
+      isShowBT: false, //用来确定置顶按钮是否出现
     };
   },
-  components: {},
+  components: {
+    BackTop,
+  },
   props: {
     probeType: {
       type: Number,
@@ -35,7 +41,12 @@ export default {
     pullUpLoad: {
       type: Boolean,
       default: false,
-      // 这个需要设置为false，因为新版本这个设为true后默认probetype就是3了
+      // 这个需要设置为false，因为新版本这个设为true后默认probetype就是3了，这样所有组件监听时刻打开
+    },
+    backTopTime: {
+      type: Number,
+      default: 400,
+      // 返回顶部的时间，默认为400ms
     },
   },
   mounted() {
@@ -51,7 +62,8 @@ export default {
     // 2.监听滚动位置
     this.scroll.on("scroll", (position) => {
       // console.log(position);
-      this.$emit("scroll", position);
+      // this.$emit("scroll", position);
+      this.isShowBT = position.y < -1000;
     });
     // 3.监听上拉事件
     this.scroll.on("pullingUp", () => {
@@ -63,11 +75,31 @@ export default {
     scrollTo(x, y, time = 400) {
       this.scroll.scrollTo(x, y, time);
     },
-    finishPullup() {
-      this.scroll.finishPullup();
+    finishPullUp() {
+      this.scroll.finishPullUp();
+    },
+    // 直接置顶的更暴力封装
+    returnTop(t) {
+      console.log("组件内的回到顶部点击");
+      this.scroll.scrollTo(0, 0, t);
+    },
+    refresh() {
+      console.log("refresh被调用");
+      this.scroll && this.scroll.refresh();
     },
   },
 };
 </script>
 <style scoped>
+/* .backtop {
+  display: fixed;
+} */
+.testImg {
+  position: fixed;
+  right: 0px;
+  top: 80px;
+  z-index: 99;
+  width: 150px;
+  height: 150px;
+}
 </style>

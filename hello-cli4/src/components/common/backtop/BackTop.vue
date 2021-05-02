@@ -19,9 +19,12 @@ export default {
   position: fixed;
   right: 10px;
   bottom: 60px;
+  /* z-index: 2; */
 }
+
 .back-top img {
   height: 43px;
   width: 43px;
+  /* z-index: 99; */
 }
 </style>

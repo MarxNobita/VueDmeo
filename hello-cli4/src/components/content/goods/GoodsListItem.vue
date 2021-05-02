@@ -1,7 +1,8 @@
 <template>
   <div class="goods-item" v-for="(item, index) in goodsItem" :key="index">
     <!-- <span>{{ item }}</span> -->
-    <img :src="item.show.img" alt="" />
+    <img :src="item.show.img" alt="" @load="imageItemLoad" />
+    <!-- <img :src="item.show.img" alt="" /> -->
     <div class="goods-info">
       <p>{{ item.title }}</p>
       <span class="price">{{ item.price }}</span>
@@ -21,7 +22,15 @@ export default {
       },
     },
   },
+
   components: {},
+  methods: {
+    imageItemLoad() {
+      // console.log("goodsitem加载完了，");
+      // this.$bus.$emit("imageHomeLoad");
+      this.$emit("listLoad");
+    },
+  },
 };
 </script>
 <style>

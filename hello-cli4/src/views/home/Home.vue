@@ -9,6 +9,9 @@
       ref="homescroll"
       :probe-type="3"
       @scroll="hiddenBacktop"
+      :backTopTime="2000"
+      :pullUpLoad="true"
+      @pullingUp="loadMore"
     >
       <home-swiper :banners="banners"></home-swiper>
       <home-recommend :recommends="recommends"></home-recommend>
@@ -21,9 +24,12 @@
         :titles="['人气', '精选', '新店']"
         @changeCurrentIndex="changeCurrentItem"
       ></tab-control>
-      <goods-list :good="goods[currentIndex].list"></goods-list>
+      <goods-list
+        :good="goods[currentIndex].list"
+        @homeImageLoad="homeLoadMore"
+      ></goods-list>
     </scroll>
-    <back-top @click="backtoTop" v-show="isShowBackTop"></back-top>
+    <!-- <back-top @click="backtoTop" v-show="isShowBackTop"></back-top> -->
     <!-- 新版的好像不用@click.native也可以了 -->
     <!-- 带有滚动的可以使用better-scroll插件，性能更高，还有弹窗效果 -->
     <ul>
@@ -199,8 +205,19 @@ export default {
     this.getHomeGoodsInHome("pop");
     this.getHomeGoodsInHome("new");
     this.getHomeGoodsInHome("sell");
+    // this.$bus.$on("imageHomeLoad", () => {
+    //   console.log("home接受到事件总线");
+    // });
   },
-
+  mounted() {
+    // ???是这样做？
+    // this.debounce(this.$refs.homescroll.refresh, 300);
+    // // this.homeLoadMore();
+    // this.event("homeLoadMore", () => {
+    //   this.$refs.homescroll.refresh();
+    //   console.log("home收到图片加载完成");
+    // });
+  },
   methods: {
     getHomeGoodsInHome(type) {
       const page = this.goods[type].page + 1;
@@ -265,7 +282,7 @@ export default {
       }
     },
     backtoTop() {
-      console.log("home已收到");
+      // console.log("home已收到");
       this.$refs.homescroll.scrollTo(0, 0);
       // 而这种是直接调用组件里封装的方法
       // this.$refs.homescroll.scroll.scrollTo(0, 0);
@@ -280,6 +297,35 @@ export default {
       this.isShowBackTop = position.y < -1000;
     },
     //这个 hiddenBacktop放到计算属性只会触发一次？
+
+    /*没有防抖节流，还容易出现better-scroll的bug废弃掉，
+    loadMore() {
+      console.log("home里的上拉加载更多");
+      this.getHomeGoodsInHome(this.currentIndex);
+      setTimeout(() => {
+        this.$refs.homescroll.finishPullUp();
+      }, 2000);
+      // this.$refs.homescroll.scroll.refresh();
+      // 重新计算下高度，避免bug，但是新版好像不用考虑这个bug了
+    },
+    */
+
+    homeLoadMore() {
+      // this.$refs.homescroll.refresh();
+      // console.log("home收到图片加载完成");
+      this.debounce(this.$refs.homescroll.refresh(), 300);
+    },
+
+    // 防抖函数
+    debounce(func, delay = 200) {
+      let timer = null;
+      return function (...args) {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          func.apply(this, args);
+        }, delay);
+      };
+    },
   },
   // computed是依赖缓存的，对于任何复杂计算逻辑，最好使用这个而不是methods
   computed: {},

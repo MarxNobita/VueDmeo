@@ -1,6 +1,9 @@
 <template>
   <div class="goods-list">
-    <goods-list-item :goodsItem="good"></goods-list-item>
+    <goods-list-item
+      :goodsItem="good"
+      @listLoad="listLoadMethod"
+    ></goods-list-item>
     <!-- {{ good }} -->
   </div>
 </template>
@@ -19,6 +22,12 @@ export default {
       default() {
         return [];
       },
+    },
+  },
+  methods: {
+    listLoadMethod() {
+      // console.log("list收到了");
+      this.$emit("homeImageLoad");
     },
   },
 };
